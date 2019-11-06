@@ -46,26 +46,28 @@ router.post('/', async (req, res)=>{
         res.status(400).send('bad request');
         console.log('error', err)
     }
-
-    router.put('/:id', async (req, res)=>{
-        try {
-            let movie = await Movie.findByIdAndUpdate(
-                req.params.id,
-                {
-                    title: req.body.title,
-                    numberInStock: req.body.numberInStock,
-                    dailyRentalRate: req.body.dailyRentalRate,
-                    genre: req.body.genre
-                }, 
-                {new: true});
-            movie = await movie.save()
-            res.send(movie)
-        }
-        catch(err){
-            console.log('erreur', err)
-            res.status(400).send('bad request')
-        }
-    })
 })
+
+router.put('/:id', async (req, res)=>{
+    try {
+        const {error} = validateMovie(req.body)
+        if (error) return res.status(400).send(error.details[0].message);
+        let movie = await Movie.findByIdAndUpdate(req.params.id, {
+                title: req.body.title,
+                numberInStock: req.body.numberInStock,
+                dailyRentalRate: req.body.dailyRentalRate,
+                genre: req.body.genre
+            }, 
+            {new: true});
+        res.send(movie)
+        if(!movie){
+            return res.status(404).send(`${req.params.id} inexistant`)
+        }
+    } catch(err) {
+        console.log('erreur', err)
+        res.status(400).send('Bad request')
+    }
+})
+
 
 module.exports = router;
