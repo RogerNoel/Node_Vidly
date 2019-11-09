@@ -19,7 +19,7 @@ router.get('/', async (req, res)=>{
 router.get('/:id', async(req, res)=>{
     try {
         const movie = await Movie.findById(req.params.id)
-        if (!movie){console.log(`Pas de film avec l'id ${req.params.id}`)}
+        if (!movie){res.send(`Pas de film avec l'id ${req.params.id}`)}
         res.send(movie);
     }
     catch(err){
@@ -68,6 +68,18 @@ router.put('/:id', async (req, res)=>{
         res.status(400).send('Bad request')
     }
 })
+
+router.delete('/:id', async (req, res)=>{
+    try {
+    const result = await Movie.findByIdAndDelete({_id:req.params.id})
+    res.end(`Le film ${result.title} a été supprimé.`)
+    }
+    catch(error){
+        console.log('erreur', error)
+        res.status(400).send('bad request')
+    }
+}) 
+
 
 
 module.exports = router;
