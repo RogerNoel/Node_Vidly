@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 mongoose.set('useFindAndmodify', false);
-const Rental = require('../models/rentals')
+const {Rental, validateRentals} = require('../models/rentals')
 
 router.get('/', async (req, res)=>{
     try {
@@ -16,6 +16,8 @@ router.get('/', async (req, res)=>{
 
 router.post('/', async (req, res)=>{
     try {
+        const {error} = validateRentals(req.body)
+        if(error){return res.status(400).send(error.details[0].message)}
         let newRental = new Rental({
             rentalDate: Date.now(),
             customer: req.body.customer,
