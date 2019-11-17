@@ -19,9 +19,12 @@ router.post('/', async (req, res)=>{
         const {error} = validateRentals(req.body)
         if(error){return res.status(400).send(error.details[0].message)}
         let newRental = new Rental({
-            rentalDate: Date.now(),
+            inputDate: Date.now(),
             customer: req.body.customer,
-            movie: req.body.movie
+            movie: req.body.movie,
+            dateOut: Date.now(),
+            dateBack: req.body.dateBack,
+            rentalFee: req.body.rentalFee
         })
         console.log(newRental)
         newRental = await newRental.save()
