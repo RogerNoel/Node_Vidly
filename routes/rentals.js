@@ -3,6 +3,10 @@ const router = express.Router();
 const mongoose = require('mongoose');
 mongoose.set('useFindAndmodify', false);
 const {Rental, validateRentals} = require('../models/rentals')
+const {Customer} = require ('../models/customers')
+const {Movie} = require('../models/movies')
+
+// console.log(Customer)
 
 router.get('/', async (req, res)=>{
     try {
@@ -18,16 +22,31 @@ router.post('/', async (req, res)=>{
     try {
         const {error} = validateRentals(req.body)
         if(error){return res.status(400).send(error.details[0].message)}
+
+        const customer = await Customer.findById(req.body.customerId);
+        if(!customer) { return res.status(400).send('Invalid customer')}
+
+        const movie = await Movie.findById(req.body.movieId);
+        if(!movie) { return res.status(400).send('Invalid movie')}
+
+        if(movie.numberInStock === 0) {return res.status(400).send('Movie not available')}
+
         let newRental = new Rental({
-            inputDate: Date.now(),
-            customer: req.body.customer,
-            movie: req.body.movie,
-            dateOut: Date.now(),
-            dateBack: req.body.dateBack,
-            rentalFee: req.body.rentalFee
+            customer: {
+                _id: customer._id,
+                name: customer.name,
+                phone: customer.phone
+            },
+            movie: {
+                _id: movie._id,
+                title: movie.title,
+                dailyRentalRate: movie.dailyRentalRate
+            }
         })
         console.log(newRental)
         newRental = await newRental.save()
+        movie.numberInStock--;
+        movie.save()
         res.send(newRental)
     }
     catch(err){
