@@ -18,6 +18,17 @@ router.get('/', async (req, res)=>{
     }
 })
 
+router.get('/:id', async (req, res)=>{
+    try {
+        const rental = await Rental.findById(req.params.id);
+        res.send(rental)
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(400).send('bad request')
+    }
+})
+
 router.post('/', async (req, res)=>{
     try {
         const {error} = validateRentals(req.body)
