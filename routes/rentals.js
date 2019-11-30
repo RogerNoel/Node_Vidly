@@ -56,14 +56,25 @@ router.post('/', async (req, res)=>{
             }
         })
         console.log(newRental)
-        newRental = await newRental.save()
-        movie.numberInStock--;
-        movie.save()
-        // both of the .save() operations must be accomplished => we need a "transaction"
+        // both of the following .save() operations must be accomplished => we need a "transaction"
         // with this "transaction" either both of those operations will be accomplished or
         // none of them. Transaction will then accomplish a rollback to recover the falsely updated datas
         // In mongo, this "transaction" consists in a "two-face commit", but we can use an npm package to simulate this: "fawn" (npm install fawn)
-        res.send(newRental)
+        // --> first we do not need those lines anymore, they're gonna be replaced by a single task
+            // newRental = await newRental.save()
+            // movie.numberInStock--;
+            // movie.save()
+        try {
+            new Fawn.Task()
+                .save('rentals', newRental) // /!\ first argument is collection NOT in singular
+                .update('movies', {_id: movie._id}, {
+                    $inc: {numberInStock: -1}
+                })
+                .run()
+            res.send(newRental)
+        } catch(err) {
+            res.status(500).send('Something went wrong')
+        }
     }
     catch(err){
         console.log('error', err)
