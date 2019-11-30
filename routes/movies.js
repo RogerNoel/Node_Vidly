@@ -8,6 +8,7 @@ mongoose.set('useFindAndmodify', false);
 router.get('/', async (req, res)=>{
     try {
         let movies = await Movie.find()
+        .populate('genre')
         res.send(movies)
     }
     catch(err){
