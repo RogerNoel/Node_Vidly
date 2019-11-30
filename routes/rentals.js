@@ -1,3 +1,4 @@
+const Fawn = require('fawn') // import de "fawn" pour transaction, il doit être initialisé sous la liste des require
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
@@ -6,11 +7,11 @@ const {Rental, validateRentals} = require('../models/rentals')
 const {Customer} = require ('../models/customers')
 const {Movie} = require('../models/movies')
 
-// console.log(Customer)
+Fawn.init(mongoose);
 
 router.get('/', async (req, res)=>{
     try {
-        res.send(await Rental.find())
+        res.send(await Rental.find().sort('-dateOut'))
     }
     catch(err) {
         console.log('error', err);
@@ -58,6 +59,10 @@ router.post('/', async (req, res)=>{
         newRental = await newRental.save()
         movie.numberInStock--;
         movie.save()
+        // both of the .save() operations must be accomplished => we need a "transaction"
+        // with this "transaction" either both of those operations will be accomplished or
+        // none of them. Transaction will then accomplish a rollback to recover the falsely updated datas
+        // In mongo, this "transaction" consists in a "two-face commit", but we can use an npm package to simulate this: "fawn" (npm install fawn)
         res.send(newRental)
     }
     catch(err){

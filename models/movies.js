@@ -3,12 +3,25 @@ mongoose.set('useFindAndModify', false);
 const Joi = require('joi');
 
 const movieSchema = new mongoose.Schema({
-    title: String,
-    numberInStock: Number,
-    dailyRentalRate: Number,
+    title: {
+        type: String,
+        required: true,
+        maxlength: 255
+    },
+    numberInStock: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    dailyRentalRate: {
+        type: Number,
+        required: true,
+        min: 0
+    },
     genre: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'genre'
+        ref: 'genre',
+        required: true
     }
 });
 
@@ -17,10 +30,10 @@ const Movie = mongoose.model('movie', movieSchema);
 // créer une fonction de validation:
 function validateMovie(movie){
     const schema = {
-        title: Joi.string().required(),
-        numberInStock: Joi.number().required(),
+        title: Joi.string().required().max(255),
+        numberInStock: Joi.number().required().min(0),
         dailyRentalRate: Joi.number().required(),
-        genre: Joi.string()
+        genre: Joi.string().required()
     }
     return Joi.validate(movie, schema);
 };
