@@ -33,13 +33,13 @@ router.post('/', async (req, res)=>{
     try {
         const {error} = validateMovie(req.body)
         if (error) return res.status(400).send(error.details[0].message);
-        let newMovie = new Movie({
+        const newMovie = new Movie({
             title: req.body.title,
             numberInStock: req.body.numberInStock,
             dailyRentalRate: req.body.dailyRentalRate,
             genre: req.body.genre
         })
-        newMovie = await newMovie.save();
+        await newMovie.save();
         console.log(newMovie)
         res.send(newMovie);
     }
