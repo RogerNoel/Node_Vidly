@@ -19,7 +19,7 @@ router.get('/', async (req, res)=>{
 
 router.get('/:id', async(req, res)=>{
     try {
-        const movie = await Movie.findById(req.params.id)
+        let movie = await Movie.findById(req.params.id).populate('genre')
         if (!movie){res.send(`Pas de film avec l'id ${req.params.id}`)}
         res.send(movie);
     }
