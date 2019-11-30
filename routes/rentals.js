@@ -15,7 +15,7 @@ router.get('/', async (req, res)=>{
     }
     catch(err) {
         console.log('error', err);
-        res.status(400).send('bad request')
+        res.status(400).send('bad request' + err)
     }
 })
 
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res)=>{
     }
     catch (err) {
         console.log(err)
-        return res.status(400).send('bad request')
+        return res.status(400).send('bad request' + err)
     }
 })
 
@@ -74,12 +74,12 @@ router.post('/', async (req, res)=>{
                 .run()
             res.send(newRental)
         } catch(err) {
-            res.status(500).send('Something went wrong')
+            res.status(500).send('Something went wrong: ' + err)
         }
     }
     catch(err){
         console.log('error', err)
-        res.status(400).send('bad request')
+        res.status(400).send('bad request' + err)
     }
 })
 

@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
         res.send(await Customer.find().sort('name'));
     }
     catch(err) {
+        res.status(400).send('Bad request: ' + err)
         console.log(err.message);
     }
     
@@ -37,20 +38,27 @@ router.get('/name/:name', async (req, res)=>{
         res.send(customer);
     }
     catch(err) {
+        res.status(400).send('Bad request: ' + err)
         console.log(err.message);
     }   
 });
 
 router.post('/', async (req, res) => {
-    const {error} = customersValidate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    let newCustomer = new Customer({
-        isGold: req.body.isGold,
-        name: req.body.name,
-        phone: req.body.phone
-    });
-    newCustomer = await newCustomer.save();
-    res.send(newCustomer);
+    try {
+        const {error} = customersValidate(req.body);
+        if (error) return res.status(400).send(error.details[0].message);
+        let newCustomer = new Customer({
+            isGold: req.body.isGold,
+            name: req.body.name,
+            phone: req.body.phone
+        });
+        newCustomer = await newCustomer.save();
+        res.send(newCustomer);
+    }
+    catch(err) {
+        res.status(400).send('Bad request: ' + err)
+        console.log('error', err)
+    }
 });
 
 router.put('/:id', async (req, res)=>{

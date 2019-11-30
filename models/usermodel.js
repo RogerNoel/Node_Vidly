@@ -3,9 +3,9 @@ const Joi = require('joi');
 
 function validateUser(item){
     const schema = {
-        name: Joi.string().required().min(0).max(20),
-        email: Joi.string().required(),
-        password: Joi.string().required().min(4).max(20)
+        name: Joi.string().required().min(3).max(20),
+        email: Joi.string().required().email(),
+        password: Joi.string().required().min(4).max(255)
     }
     return Joi.validate(item, schema)
 }
@@ -26,7 +26,7 @@ const User = mongoose.model('user', new mongoose.Schema({
         type: String,
         required: true,
         min: 5,
-        max: 20
+        max: 1024
     }
 }))
 

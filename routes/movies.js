@@ -44,7 +44,7 @@ router.post('/', async (req, res)=>{
         res.send(newMovie);
     }
     catch(err) {
-        res.status(400).send('bad request');
+        res.status(400).send('bad request' + err);
         console.log('error', err)
     }
 })
@@ -66,7 +66,7 @@ router.put('/:id', async (req, res)=>{
         }
     } catch(err) {
         console.log('erreur', err)
-        res.status(400).send('Bad request')
+        res.status(400).send('Bad request' + err)
     }
 })
 

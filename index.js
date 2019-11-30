@@ -21,7 +21,7 @@ app.use('/', home);
 app.use('/api/customers', customersRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/rentals', rentalsRouter);
-app.use('/api/logins', usersRouter);
+app.use('/api/users', usersRouter);
 
 const port = 5000 || process.env.PORT;
 app.listen(port, ()=> console.log(`Listening on port ${port}`))
