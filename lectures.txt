@@ -1,1 +1,5 @@
-Read I10 --> validating object id's
+The user model and user post route have been implemented
+
+The res.send() sends back the password to the client and that must be fixed
+
+Read J04 - using lodash

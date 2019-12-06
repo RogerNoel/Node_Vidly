@@ -18,7 +18,7 @@ router.post('/', async (req, res)=>{
             password: req.body.password
         })
         await user.save()
-        res.send(user)
+        res.send(user) // /!\ !!! password must not be sent back to the client
     }
     catch(err) {
         res.status(400).send('bad request: ' + err);
