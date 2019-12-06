@@ -9,6 +9,7 @@ const mongoose = require('mongoose')
 const moviesRouter = require('./routes/movies')
 const rentalsRouter = require('./routes/rentals')
 const usersRouter = require('./routes/user')
+const authRouter = require('./routes/auth')
 
 mongoose.connect('mongodb://localhost/vidly', {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>{console.log(`Connected to mongoDB`)})
@@ -22,6 +23,7 @@ app.use('/api/customers', customersRouter);
 app.use('/api/movies', moviesRouter);
 app.use('/api/rentals', rentalsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 
 const port = 5000 || process.env.PORT;
 app.listen(port, ()=> console.log(`Listening on port ${port}`))
