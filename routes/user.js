@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
@@ -12,13 +13,10 @@ router.post('/', async (req, res)=>{
         let user = await User.findOne({email: req.body.email});
         if (user) return res.status(400).send('This email is already used.')
 
-        user = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password
-        })
+        user = new User(_.pick(req.body, ['name', 'email', 'password']));
         await user.save()
-        res.send(user) // /!\ !!! password must not be sent back to the client
+        
+        res.send(_.pick(user, ['name', 'email', '_id'])) // /!\ !!! password must not be sent back to the client
     }
     catch(err) {
         res.status(400).send('bad request: ' + err);
