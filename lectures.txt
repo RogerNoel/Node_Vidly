@@ -1,5 +1,8 @@
-The user model and user post route have been implemented
+authentification is implemented:
+    in user.js password is salted and hashed
 
-The res.send() sends back the password to the client and that must be fixed
+    auth.js has been created to login the user with his email and password
 
-Read J04 - using lodash
+    the logic to compare the raw user password and the hashed pwd is implemented
+
+Read J07 - testing the authentification
