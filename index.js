@@ -1,3 +1,4 @@
+const config = require ('config');
 const Joi = require('joi')
 Joi.objectId = require('joi-objectid')(Joi)
 const express = require('express')
@@ -28,6 +29,13 @@ app.use('/api/auth', authRouter);
 // const settings = app.get('env')
 // console.log(settings)
 // console.log(process.env.NODE_ENV)
+
+// pour tests d'exercice sur les variables d'environnement
+// console.log('Application name: ' + config.get('name'))
+// console.log('mail server: ' + config.get('mail.host'))
+// console.log('mail password: ' + config.get('mail.password'))
+
+
 
 const port = 5000 || process.env.PORT;
 app.listen(port, ()=> console.log(`Listening on port ${port}`))

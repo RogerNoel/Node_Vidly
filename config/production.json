@@ -1,0 +1,6 @@
+{
+    "name": "App Vidly - production",
+    "mail": {
+        "host": "prod-mail-server"
+    }
+}
