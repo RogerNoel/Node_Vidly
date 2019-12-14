@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken')
+const config = require('config')
 const bcrypt = require('bcrypt')
 const _ = require('lodash')
 const express = require('express')
@@ -19,8 +21,10 @@ router.post('/', async (req, res)=>{
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt) // we reset the pwd after salt/hash it
         await user.save()
-        
-        res.send(_.pick(user, ['name', 'email', '_id'])) // /!\ !!! password must not be sent back to the client
+
+        const token = jwt.sign({_id:user._id}, config.get('jwtPrivateKey'));
+                
+        res.header('x-auth-token', token).send(_.pick(user, ['name', 'email', '_id'])) // /!\ !!! password must not be sent back to the client
     }
     catch(err) {
         res.status(400).send('bad request: ' + err);
