@@ -12,6 +12,11 @@ const rentalsRouter = require('./routes/rentals')
 const usersRouter = require('./routes/user')
 const authRouter = require('./routes/auth')
 
+if (!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: jwt Private Key is not defined')
+    process.exit(1);
+}
+
 mongoose.connect('mongodb://localhost/vidly', {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=>{console.log(`Connected to mongoDB`)})
 .catch(err => console.log(err));
