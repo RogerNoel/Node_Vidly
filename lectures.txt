@@ -1,8 +1,1 @@
-authentification is implemented:
-    in user.js password is salted and hashed
-
-    auth.js has been created to login the user with his email and password
-
-    the logic to compare the raw user password and the hashed pwd is implemented
-
-Read J07 - testing the authentification
+Read storing secrets in ENV variables

@@ -15,6 +15,7 @@ router.post('/', async (req, res)=>{
         if (user) return res.status(400).send('This email is already used.')
 
         user = new User(_.pick(req.body, ['name', 'email', 'password']));
+        // crypting the pwd the user encoded
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(user.password, salt) // we reset the pwd after salt/hash it
         await user.save()

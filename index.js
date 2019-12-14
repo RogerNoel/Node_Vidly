@@ -25,5 +25,9 @@ app.use('/api/rentals', rentalsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/auth', authRouter);
 
+// const settings = app.get('env')
+// console.log(settings)
+// console.log(process.env.NODE_ENV)
+
 const port = 5000 || process.env.PORT;
 app.listen(port, ()=> console.log(`Listening on port ${port}`))

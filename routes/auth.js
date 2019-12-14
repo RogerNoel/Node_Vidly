@@ -7,6 +7,8 @@ const router = express.Router()
 const {User} = require('../models/usermodel')
 mongoose.set('useCreateIndex', 'true');
 
+// auth is used for validating the connexion of an existing user who logs in with email/pwd
+
 router.post('/', async (req, res)=> {
     try{
         const { error } = validateAuth(req.body)
@@ -14,6 +16,7 @@ router.post('/', async (req, res)=> {
         let user = await User.findOne({email:req.body.email})
         if (!user) return res.status(400).send('Invalid email')
         const pwdValidation = await bcrypt.compare(req.body.password, user.password)
+        if (!pwdValidation) return res.status(400).send('Invalid email or password')
 
         const token = jwt.sign({_id:user._id}, 'jwtPrivateKey');
         let verify = jwt.verify(token, 'jwtPrivateKey');
