@@ -1,3 +1,4 @@
 {
-    "name": "Vidly app exercise"
+    "name": "Vidly app exercise",
+    "jwtPrivateKey": ""
 }
