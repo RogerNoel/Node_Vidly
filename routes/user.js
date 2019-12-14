@@ -23,8 +23,7 @@ router.post('/', async (req, res)=>{
         await user.save()
 
         const token = jwt.sign({_id:user._id}, config.get('jwtPrivateKey'));
-                
-        res.header('x-auth-token', token).send(_.pick(user, ['name', 'email', '_id'])) // /!\ !!! password must not be sent back to the client
+        res.header('x-auth-token', token).send(_.pick(user, ['name', 'email', '_id']))
     }
     catch(err) {
         res.status(400).send('bad request: ' + err);
